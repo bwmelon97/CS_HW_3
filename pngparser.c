@@ -238,6 +238,7 @@ int read_png_chunk(FILE *file, struct png_chunk *chunk) {
   chunk->length = to_little_endian(chunk->length);
 
   if (chunk->length) {
+    /* bug: out-of-memory */
     chunk->chunk_data = malloc(chunk->length);
     if (!chunk->chunk_data)
       goto error;
@@ -698,6 +699,7 @@ error:
 
   if (current_chunk) {
     if (current_chunk->chunk_data) {
+      current_chunk->chunk_data = NULL;
       free(current_chunk->chunk_data);
     }
     free(current_chunk);
