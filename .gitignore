@@ -9,3 +9,4 @@ fuzzer_store_png_name
 fuzzer_store_png_rgba
 fuzzer_store_png_palette
 testfile.png
+out.png
