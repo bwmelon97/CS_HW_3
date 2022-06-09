@@ -1,10 +1,10 @@
 CC = clang
 override CFLAGS += -g -w -O0 -fsanitize=fuzzer,address
 
-all: libpngparser fuzzer_load_png fuzzer_load_png_name fuzzer_store_png_name fuzzer_store_png_rgba
+all: libpngparser fuzzer_load_png fuzzer_load_png_name fuzzer_store_png_name fuzzer_store_png_rgba fuzzer_store_png_palette
 
 clean:
-	rm -f libpngparser.a fuzzer_load_png *.o fuzzer_load_png_name fuzzer_store_png_name fuzzer_store_png_rgba
+	rm -f libpngparser.a fuzzer_load_png *.o fuzzer_load_png_name fuzzer_store_png_name fuzzer_store_png_rgba fuzzer_store_png_palette
 
 .PHONY: all clean
 
@@ -27,6 +27,8 @@ fuzzer_store_png_rgba:
 
 # TO DO: fuzzer_store_png_palette:
 # Fuzzes store_png palette file interface (fixed palette).
+fuzzer_store_png_palette:
+	$(CC) $(CFLAGS) -o fuzzer_store_png_palette fuzzer_store_png_palette.c libpngparser.a -lz
 
 # TO DO: fuzzer_store_png_name:
 # Fuzzes the filename argument of store_png.
