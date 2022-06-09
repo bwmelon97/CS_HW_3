@@ -15,7 +15,7 @@ When the function `convert_color_palette_to_image` receieves `plte_chunk` as NUL
 
 #### Affected Lines
 
-In `pngparser.c:667`, `pngparser.c:501`, `pngparser.c:485`, `pngparser.c:385`
+In `pngparser.c:667`, `pngparser.c:517`, `pngparser.c:501`, `pngparser.c:485`, `pngparser.c:385`
 
 ```c
 // Line 385: plte_chunk is NULL !!
@@ -28,6 +28,10 @@ return convert_color_palette_to_image(ihdr_chunk, plte_chunk, inflated_buf,
 // Line 501
 return convert_data_to_image(ihdr_chunk, plte_chunk, inflated_buf,
                              inflated_size);
+
+// Line 517
+return parse_png_no_interlace(ihdr_chunk, plte_chunk, inflated_buf,
+                                  inflated_size);
 
 // Line 667
 *img = parse_png(ihdr_chunk, plte_chunk, inflated_buf, inflated_size);
@@ -50,4 +54,17 @@ I observed a NULL pointer access error when I created a test image with the data
 Attach `poc_03.bin` in the same directory with `fuzzer_store_png_rgba`.
 
 #### Suggested Fix Description
+
+Add a condition that checks if the `plte_chunk` is NULL, in the function `parse_png`. It guarantees that the `plte_chunk` in the function `convert_color_palette_to_image` is also not NULL.
+
+```c
+// pngparser.c:516
+case PNG_IHDR_INTERLACE_NO_INTERLACE:
+    // chuck if plte_chunk is null !!
+		if (!plte_chunk) {
+	      return NULL;
+    }
+    return parse_png_no_interlace(ihdr_chunk, plte_chunk, inflated_buf,
+                                  inflated_size);
+```
 
