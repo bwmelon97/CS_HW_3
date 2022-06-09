@@ -1028,6 +1028,11 @@ int store_png(const char *filename, struct image *img, struct pixel *palette,
   int result = 0;
   FILE *output = fopen(filename, "wb");
 
+  /* if output is null, return 1 */
+  if(!output) {
+    return 1;
+  }
+
   store_filesig(output);
 
   if (palette) {
