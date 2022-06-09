@@ -9,7 +9,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
         return 0;
     }
     
-    struct image *test_img;
+    struct image *test_img = NULL;
     store_png("out.png", &test_img, Data, (Size / 4));
     free(test_img);
 
