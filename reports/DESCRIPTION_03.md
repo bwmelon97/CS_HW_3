@@ -35,7 +35,7 @@ return convert_data_to_image(ihdr_chunk, plte_chunk, inflated_buf,
 
 #### Expected vs Observed
 
-I observed a NULL pointer access error when I created a test image with the data of `pop_03.bin` and stored the test image using the `store_png` function.
+I observed a NULL pointer access error when I created a test image with the data of `poc_03.bin` and stored the test image using the `store_png` function.
 
 #### Steps to Reproduce
 

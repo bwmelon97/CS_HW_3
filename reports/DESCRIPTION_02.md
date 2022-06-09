@@ -44,7 +44,7 @@ img->px[idy * img->size_x + idx].green = inflated_buf[g_idx];
 
 #### Expected vs Observed
 
-I observed a heap-buffer-overflow error when I create a png file with the data of `pop_02.bin` and call `load_png` with that png file.
+I observed a heap-buffer-overflow error when I create a png file with the data of `poc_02.bin` and call `load_png` with that png file.
 
 #### Steps to Reproduce
 
