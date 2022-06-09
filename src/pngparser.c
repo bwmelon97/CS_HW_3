@@ -516,6 +516,9 @@ struct image *parse_png(png_chunk_ihdr *ihdr_chunk, png_chunk_plte *plte_chunk,
 
   switch (ihdr_header->interlace) {
   case PNG_IHDR_INTERLACE_NO_INTERLACE:
+    if (!plte_chunk) {
+      return NULL;
+    }
     return parse_png_no_interlace(ihdr_chunk, plte_chunk, inflated_buf,
                                   inflated_size);
   case PNG_IHDR_INTERLACE_ADAM7:
