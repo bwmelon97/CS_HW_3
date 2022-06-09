@@ -3,6 +3,7 @@
 #include "zlib.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define PNG_OUTPUT_CHUNK_SIZE (1 << 14)
 
@@ -544,7 +545,32 @@ int load_png(const char *filename, struct image **img) {
 
   struct png_chunk *current_chunk = malloc(sizeof(struct png_chunk));
 
-  FILE *input = fopen(filename, "rb");
+  FILE *input = NULL;
+  int i = 0;
+  while(filename[i] != '\0') {
+    /* if filename is not followed linux file name restriction,
+     * raise an error.
+     * ref: https://www.cyberciti.biz/faq/linuxunix-rules-for-naming-file-and-directory-names/
+     */
+
+    bool file_name_rule =
+      filename[i] > 0x30 && filename[i] < 0x39 ||   // 숫자
+      filename[i] > 0x41 && filename[i] < 0x5A ||   // 대문자
+      filename[i] > 0x61 && filename[i] < 0x7A ||   // 소문자
+      filename[i] == 0x2E ||                        // . (dot)
+      filename[i] == 0x5F;                          // _ (underbar)
+
+    if ( !file_name_rule ) {
+      goto error;
+    }
+
+    i += 1;
+  }
+  if (i == 0 || i > 255) {
+    /* if filename length is 0 or larger than 255, goto error */
+    goto error;
+  }
+  input = fopen(filename, "rb");
 
   // Has the file been open properly?
   if (!input) {
@@ -692,7 +718,9 @@ success:
 
   return 0;
 error:
-  fclose(input);
+  if (input) {
+    fclose(input);
+  }
 
   if (deflated_buf)
     free(deflated_buf);
