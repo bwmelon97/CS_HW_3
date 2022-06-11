@@ -11,3 +11,6 @@ fuzzer_store_png_palette
 testfile.png
 out.png
 seeds/
+
+submission/
+submission.zip
